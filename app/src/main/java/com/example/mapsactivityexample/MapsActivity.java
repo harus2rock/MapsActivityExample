@@ -12,6 +12,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -52,7 +56,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         latlng = new LatLng(latitude, longitude);
 
         // a standard marker
-        setMarker(latitude, longitude);
+//        setMarker(latitude, longitude);
+
+        // Icon
+        setIcon(latitude, longitude);
     }
 
     private void setMarker(double latitude, double longitude){
@@ -62,8 +69,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(markerOptions);
 
         // zoom
-//        zoomMap(latitude, longitude);
+        zoomMap(latitude, longitude);
 
+    }
+
+    private void setIcon(double latitude, double longitude){
+        // Create BitmapDescriptor
+        // you have to get an image yourself
+        BitmapDescriptor descriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+
+        // Paste
+        GroundOverlayOptions overlayOptions = new GroundOverlayOptions();
+        overlayOptions.image(descriptor);
+
+        //　public GroundOverlayOptions anchor (float u, float v)
+        // (0,0):top-left, (0,1):bottom-left, (1,0):top-right, (1,1):bottom-right
+        overlayOptions.anchor(0.5f, 0.5f);
+
+        // Image size (meter)
+        // public GroundOverlayOptions	position(LatLng location, float width, float height)
+        overlayOptions.position(latlng, 300f, 300f);
+
+        // paste
+        GroundOverlay overlay = mMap.addGroundOverlay(overlayOptions);
+        // zoom
+        zoomMap(latitude, longitude);
+
+        // transparency
+        overlay.setTransparency(0.0F);
     }
 
     private void zoomMap(double latitude, double longitude){
