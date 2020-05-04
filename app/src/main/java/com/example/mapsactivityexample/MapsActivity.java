@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Locale;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -56,10 +58,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         latlng = new LatLng(latitude, longitude);
 
         // a standard marker
-//        setMarker(latitude, longitude);
+        setMarker(latitude, longitude);
 
         // Icon
-        setIcon(latitude, longitude);
+//        setIcon(latitude, longitude);
+
+        // set tap listener
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng tapLocation) {
+                // tap point's location
+                latlng = new LatLng(tapLocation.latitude, tapLocation.longitude);
+                String str = String.format(Locale.US, "%f, %f", tapLocation.latitude, tapLocation.longitude);
+                mMap.addMarker(new MarkerOptions().position(latlng).title(str));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 14));
+            }
+        });
+
+        // set long tap listener
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng longpushLocation) {
+                LatLng newlocation = new LatLng(longpushLocation.latitude, longpushLocation.longitude);
+                mMap.addMarker(new MarkerOptions().position(newlocation).title(""+longpushLocation.latitude+""+longpushLocation.longitude));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newlocation, 14));
+
+            }
+        });
     }
 
     private void setMarker(double latitude, double longitude){
