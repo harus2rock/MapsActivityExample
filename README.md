@@ -11,3 +11,11 @@ $ launchctl setenv GOOGLEAPIKEY hogehoge
 
 [[Android] Google Map 簡単に地図を表示させる](https://akira-watson.com/android/google-map.html)
 
+## Build errors
+```
+Execution failed for task ':app:processDebugManifest'. 
+> java.lang.NullPointerException (no error message)
+```
+1. remove .gradle/
+1. restart Android Studio
+1. build app
